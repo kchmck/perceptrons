@@ -5,6 +5,7 @@
 #include <cmath>
 #include <functional>
 
+#include "util.hpp"
 #include "vec.hpp"
 
 typedef std::function<double(const Vec &x, const Vec &y)> KernelFn;

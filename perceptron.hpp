@@ -119,7 +119,7 @@ namespace perceptron {
 
     protected:
         bool inner(size_t i) {
-            return averager.handle(weights, [&] {
+            return averager.handle(weights, [=] {
                 return Basic::inner(i);
             });
         }
@@ -166,7 +166,7 @@ namespace perceptron {
 
     protected:
         bool inner(size_t i) {
-            return averager.handle(alphas, [&] {
+            return averager.handle(alphas, [=] {
                 return Kernel::inner(i);
             });
         }
