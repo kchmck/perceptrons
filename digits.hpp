@@ -1,5 +1,5 @@
-#ifndef OPTDIGITS_HPP
-#define OPTDIGITS_HPP
+#ifndef DIGITS_HPP
+#define DIGITS_HPP
 
 #include <cassert>
 #include <fstream>

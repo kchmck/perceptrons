@@ -2,7 +2,7 @@
 #include <fstream>
 
 #include "kernel.hpp"
-#include "optdigits.hpp"
+#include "digits.hpp"
 #include "perceptron.hpp"
 #include "vec.hpp"
 
