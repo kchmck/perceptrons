@@ -40,12 +40,14 @@ namespace perceptron {
         }
 
         virtual bool inner(size_t i) = 0;
-        virtual Vec finish() = 0;
+        virtual double eval(const Vec &x) const = 0;
+
+        virtual void finish() {}
 
     public:
-        Vec run() {
+        void run() {
             loop();
-            return finish();
+            finish();
         }
     };
 
@@ -74,9 +76,8 @@ namespace perceptron {
             return converged;
         }
 
-        Vec finish() {
+        void finish() {
             avg.div_in((double) counter);
-            return std::move(avg);
         }
     };
 
@@ -88,9 +89,13 @@ namespace perceptron {
         Basic(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
             Abstract(phi_, labels_, epochs_),
             weights(phi[0].size(), 0.0)
-        {}
+        {
+            run();
+        }
 
-        Vec finish() { return std::move(weights); }
+        double eval(const Vec &x) const {
+            return weights.dot(x);
+        }
 
     // HACK: there's a bug in gcc (#58972) that lambdas can't access
     // private/protected members, so this has to be public.
@@ -113,9 +118,15 @@ namespace perceptron {
         Averaged(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
             Basic(phi_, labels_, epochs_),
             averager(phi[0].size())
-        {}
+        {
+            run();
+        }
 
-        Vec finish() { return averager.finish(); }
+        void finish() { averager.finish(); }
+
+        double eval(const Vec &x) const {
+            return averager.avg.dot(x);
+        }
 
     protected:
         bool inner(size_t i) {
@@ -136,18 +147,32 @@ namespace perceptron {
             Abstract(phi_, labels_, epochs_),
             fn(fn_),
             alphas(phi.size(), 0)
-        {}
+        {
+            run();
+        }
 
-        Vec finish() { return std::move(alphas); }
+        double eval(const Vec &x) const {
+            return eval(alphas, x);
+        }
 
     public:
         bool inner(size_t i) {
-            if (sgn(kernel::eval(fn, phi, labels, alphas, phi[i])) != labels[i]) {
+            if (sgn(eval(alphas, phi[i])) != labels[i]) {
                 alphas[i] += 1;
                 return false;
             }
 
             return true;
+        }
+
+    protected:
+        double eval(const Vec &alphas_, const Vec &x) const {
+            double sum = 0.0;
+
+            for (size_t j = 0; j < phi.size(); j += 1)
+                sum += (double) alphas_[j] * (double) labels[j] * fn(x, phi[j]);
+
+            return sum;
         }
     };
 
@@ -160,9 +185,15 @@ namespace perceptron {
                        const KernelFn &fn_):
             Kernel(phi_, labels_, epochs_, fn_),
             averager(phi.size())
-        {}
+        {
+            run();
+        }
 
-        Vec finish() { return averager.finish(); }
+        void finish() { averager.finish(); }
+
+        double eval(const Vec &x) const {
+            return Kernel::eval(averager.avg, x);
+        }
 
     protected:
         bool inner(size_t i) {

@@ -36,17 +36,6 @@ namespace kernel {
             return fn(x,y) / sqrt(fn(x,x) * fn(y,y));
         };
     }
-
-    double eval(const KernelFn &fn, const Phi &phi, const Labels &labels,
-                const Vec &alphas, const Vec &x)
-    {
-        double sum = 0.0;
-
-        for (size_t j = 0; j < phi.size(); j += 1)
-            sum += (double) alphas[j] * (double) labels[j] * fn(x, phi[j]);
-
-        return sum;
-    }
 }
 
 #endif
