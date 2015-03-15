@@ -4,13 +4,11 @@
 #include <cinttypes>
 #include <cmath>
 #include <functional>
+#include <utility>
 
 #include "kernel.hpp"
+#include "util.hpp"
 #include "vec.hpp"
-
-static int sgn(double x) {
-    return (int) copysign(1.0, x);
-}
 
 namespace perceptron {
     class Abstract {
@@ -33,7 +31,8 @@ namespace perceptron {
                 bool converged = true;
 
                 for (size_t i = 0; i < phi.size(); i += 1)
-                    converged = inner(i);
+                    if (!inner(i))
+                        converged = false;
 
                 if (converged)
                     break;
@@ -141,19 +140,9 @@ namespace perceptron {
 
         Vec finish() { return std::move(alphas); }
 
-    protected:
-        double calc_sum(size_t i) {
-            double sum = 0.0;
-
-            for (size_t j = 0; j < phi.size(); j += 1)
-                sum += (double) alphas[j] * (double) labels[j] * fn(i, j);
-
-            return sum;
-        }
-
     public:
         bool inner(size_t i) {
-            if (sgn(calc_sum(i)) != labels[i]) {
+            if (sgn(kernel::eval(fn, phi, labels, alphas, phi[i])) != labels[i]) {
                 alphas[i] += 1;
                 return false;
             }
