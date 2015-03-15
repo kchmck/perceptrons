@@ -8,20 +8,15 @@
 
 int main() {
     std::fstream trainStream("train.dat");
-
-    if (!trainStream)
-        abort();
+    const DigitData trainData(trainStream);
 
     std::fstream develStream("devel.dat");
-
-    if (!develStream)
-        abort();
+    const DigitData develData(develStream);
 
     std::fstream testStream("test.dat");
+    const DigitData testData(testStream);
 
     if (!testStream)
         abort();
 
-    OptDigits od(std::move(trainStream), std::move(develStream),
-                 std::move(testStream));
 }

@@ -68,17 +68,4 @@ private:
     }
 };
 
-class OptDigits {
-public:
-    DigitData train, devel, test;
-
-public:
-    OptDigits(std::istream &&trainStream, std::istream &&develStream,
-              std::istream &&testStream):
-        train(trainStream),
-        devel(develStream),
-        test(testStream)
-    {}
-};
-
 #endif
