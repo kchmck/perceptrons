@@ -1,9 +1,11 @@
-BINARY = main
-MAIN = main.cpp
+MAIN = \
+    main-validate.cpp \
+    main-tune-epochs.cpp \
+    main.cpp \
 
-SRC = \
-      $(MAIN) \
+SRC =
 
+BINARY = $(MAIN:.cpp=)
 OBJ = $(SRC:.cpp=.o)
 
 ACPPFLAGS += -Wall -Wextra -Werror -std=c++11 -pipe
@@ -36,13 +38,22 @@ ifeq ($(PROFILE), 1)
     ALDFLAGS += -g -pg
 endif
 
+COMPILE = $(CXX) $(ACPPFLAGS)
+LINK = $(CXX) -o $@ $^ $(ACPPFLAGS) $(ALDFLAGS)
+
 all: $(BINARY)
 
-$(BINARY): $(OBJ)
-	$(CXX) -o $@ $^ $(ALDFLAGS)
+main-validate: main-validate.o
+	$(LINK)
+
+main: main.o
+	$(LINK)
+
+main-tune-epochs: main-tune-epochs.o
+	$(LINK)
 
 %.o: %.cpp
-	$(CXX) -c $(ACPPFLAGS) $< -o $@
+	$(COMPILE) -c $< -o $@
 
 clean:
 	-rm -f $(OBJ)

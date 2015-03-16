@@ -3,13 +3,16 @@
 
 #include <cassert>
 #include <fstream>
+#include <functional>
 #include <vector>
+
+#include "vec.hpp"
+
+static constexpr uint32_t DIGITS = 10;
 
 class DigitData {
 private:
     static constexpr size_t FEATURES = 64;
-    static constexpr uint32_t DIGITS = 10;
-
     typedef std::function<void(uint32_t, const Phi &, const Labels &)> IterFn;
 
 public:

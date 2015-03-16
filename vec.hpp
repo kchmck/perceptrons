@@ -2,6 +2,7 @@
 #define VEC_HPP
 
 #include <cassert>
+#include <cmath>
 #include <vector>
 
 class Vec: public std::vector<double> {
