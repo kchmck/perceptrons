@@ -11,14 +11,14 @@
 #include "vec.hpp"
 
 namespace perceptron {
-    class Abstract {
+    class Base {
     protected:
         const Phi &phi;
         const Labels &labels;
         const uint32_t epochs;
 
     protected:
-        Abstract(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
+        Base(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
             phi(phi_),
             labels(labels_),
             epochs(epochs_)
@@ -81,13 +81,13 @@ namespace perceptron {
         }
     };
 
-    class Basic: public Abstract {
+    class Basic: public Base {
     protected:
         Vec weights;
 
     public:
         Basic(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
-            Abstract(phi_, labels_, epochs_),
+            Base(phi_, labels_, epochs_),
             weights(phi[0].size(), 0.0)
         {
             run();
@@ -136,7 +136,7 @@ namespace perceptron {
         }
     };
 
-    class Kernel: public Abstract {
+    class Kernel: public Base {
     protected:
         const KernelFn &fn;
         Vec alphas;
@@ -144,7 +144,7 @@ namespace perceptron {
     public:
         Kernel(const Phi &phi_, const Labels &labels_, uint32_t epochs_,
                const KernelFn &fn_):
-            Abstract(phi_, labels_, epochs_),
+            Base(phi_, labels_, epochs_),
             fn(fn_),
             alphas(phi.size(), 0)
         {
