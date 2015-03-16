@@ -93,14 +93,14 @@ namespace perceptron {
             run();
         }
 
-        double eval(const Vec &x) const {
+        double eval(const Vec &x) const override {
             return weights.dot(x);
         }
 
     // HACK: there's a bug in gcc (#58972) that lambdas can't access
     // private/protected members, so this has to be public.
     public:
-        bool inner(size_t i) {
+        bool inner(size_t i) override {
             if (sgn(weights.dot(phi[i])) != labels[i]) {
                 weights.add_in(phi[i].mult(labels[i]));
                 return false;
@@ -122,14 +122,14 @@ namespace perceptron {
             run();
         }
 
-        void finish() { averager.finish(); }
+        void finish() override { averager.finish(); }
 
-        double eval(const Vec &x) const {
+        double eval(const Vec &x) const override {
             return averager.avg.dot(x);
         }
 
     protected:
-        bool inner(size_t i) {
+        bool inner(size_t i) override {
             return averager.handle(weights, [=] {
                 return Basic::inner(i);
             });
@@ -151,12 +151,12 @@ namespace perceptron {
             run();
         }
 
-        double eval(const Vec &x) const {
+        double eval(const Vec &x) const override {
             return eval(alphas, x);
         }
 
     public:
-        bool inner(size_t i) {
+        bool inner(size_t i) override {
             if (sgn(eval(alphas, phi[i])) != labels[i]) {
                 alphas[i] += 1;
                 return false;
@@ -189,14 +189,14 @@ namespace perceptron {
             run();
         }
 
-        void finish() { averager.finish(); }
+        void finish() override { averager.finish(); }
 
-        double eval(const Vec &x) const {
+        double eval(const Vec &x) const override {
             return Kernel::eval(averager.avg, x);
         }
 
     protected:
-        bool inner(size_t i) {
+        bool inner(size_t i) override {
             return averager.handle(alphas, [=] {
                 return Kernel::inner(i);
             });
