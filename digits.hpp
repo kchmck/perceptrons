@@ -14,31 +14,22 @@ private:
 
 public:
     Phi phi;
-    std::vector<uint32_t> labels;
+    std::vector<Labels> digitLabels;
 
 public:
     DigitData(std::istream &stream):
         phi(),
-        labels()
+        digitLabels(DIGITS)
     {
         load(stream);
     }
 
     void iterDigits(const IterFn &fn) const {
-        Labels binaryLabels(labels.size(), 0);
-
-        for (uint32_t digit = 0; digit < DIGITS; digit += 1) {
-            genLabels(binaryLabels, digit);
-            fn(digit, phi, binaryLabels);
-        }
+        for (uint32_t digit = 0; digit < DIGITS; digit += 1)
+            fn(digit, phi, digitLabels[digit]);
     }
 
 private:
-    void genLabels(Labels &binaryLabels, uint32_t digit) const {
-        for (size_t i = 0; i < labels.size(); i += 1)
-            binaryLabels[i] = labels[i] == digit ? +1 : -1;
-    }
-
     void load(std::istream &stream) {
         for (;;) {
             Vec x(FEATURES, 0.0);
@@ -59,11 +50,13 @@ private:
                 assert(next == ',');
             }
 
+            phi.emplace_back(std::move(x));
+
             uint32_t label;
             assert(stream >> label);
 
-            phi.emplace_back(std::move(x));
-            labels.push_back(label);
+            for (uint32_t digit = 0; digit < DIGITS; digit += 1)
+                digitLabels[digit].push_back(label == digit ? +1 : -1);
         }
     }
 };
