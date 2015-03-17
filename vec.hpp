@@ -41,6 +41,13 @@ public:
         return sum;
     }
 
+    void norm_mut() {
+        double n = norm();
+
+        for (size_t i = 0; i < size(); i += 1)
+            (*this)[i] /= n;
+    }
+
     double dot(const Vec &other) const {
         assert(size() == other.size());
 
