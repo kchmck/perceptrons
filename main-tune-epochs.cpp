@@ -31,15 +31,13 @@ int main() {
             (void) labels;
 
             for (size_t i = 0; i < phi.size(); i += 1) {
-                auto &x = phi[i];
-
                 if (labels[i] < 0)
                     continue;
 
                 MaxTracker<uint32_t, double> maxScore;
 
                 for (uint32_t p = 0; p < DIGITS; p += 1)
-                    maxScore.consider(p, perceps[p].eval(x));
+                    maxScore.consider(p, perceps[p].eval(phi[i]));
 
                 if (maxScore.key == d)
                     correct += 1;
