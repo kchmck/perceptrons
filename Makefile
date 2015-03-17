@@ -9,6 +9,8 @@ BINARY = $(MAIN:.cpp=)
 OBJ = $(SRC:.cpp=.o)
 
 DEPS = Makefile.deps
+DATS = train.dat devel.dat test.dat
+
 STAGES = 2
 
 ACPPFLAGS += -Wall -Wextra -Werror -std=c++11 -pipe
@@ -49,7 +51,7 @@ all: stage$(STAGES)
 else ifeq ($(STAGE),1)
 all: $(DEPS)
 else ifeq ($(STAGE),2)
-all: $(BINARY)
+all: $(BINARY) $(DATS)
 endif
 
 stage1:
@@ -76,6 +78,15 @@ main-tune-epochs: main-tune-epochs.o
 
 %.o: %.cpp
 	$(COMPILE) -c $< -o $@
+
+train.dat:
+	tail -n +1001 optdigits.tra >$@
+
+devel.dat:
+	head -n 1000 optdigits.tra >$@
+
+test.dat:
+	cp optdigits.tes $@
 
 clean:
 	-rm -f $(OBJ) $(DEPS)
