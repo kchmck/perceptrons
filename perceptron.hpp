@@ -82,7 +82,7 @@ namespace perceptron {
     };
 
     class Basic: public Base {
-    protected:
+    public:
         Vec weights;
 
     public:
@@ -141,6 +141,8 @@ namespace perceptron {
     class Kernel: public Base {
     protected:
         const KernelFn &fn;
+
+    public:
         Vec alphas;
 
     public:
