@@ -13,7 +13,7 @@ static constexpr uint32_t DIGITS = 10;
 class DigitData {
 private:
     static constexpr size_t FEATURES = 64;
-    typedef std::function<void(uint32_t, const Phi &, const Labels &)> IterFn;
+    typedef std::function<void(uint32_t, const Phi &, const Labels &)> DigitIterFn;
 
 public:
     Phi phi;
@@ -27,7 +27,7 @@ public:
         load(stream);
     }
 
-    void iterDigits(const IterFn &fn) const {
+    void iterDigits(const DigitIterFn &fn) const {
         for (uint32_t digit = 0; digit < DIGITS; digit += 1)
             fn(digit, phi, digitLabels[digit]);
     }
