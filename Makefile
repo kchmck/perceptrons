@@ -1,7 +1,6 @@
 MAIN = \
     main-validate.cpp \
     main-tune-epochs.cpp \
-    main.cpp \
 
 SRC =
 
@@ -68,9 +67,6 @@ include $(DEPS)
 endif
 
 main-validate: main-validate.o
-	$(LINK)
-
-main: main.o
 	$(LINK)
 
 main-tune-epochs: main-tune-epochs.o
