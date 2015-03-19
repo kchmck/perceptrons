@@ -28,6 +28,8 @@ public:
     }
 
     void iterDigits(const DigitIterFn &fn) const {
+        // For each digit, call the function with the corresponding labels
+        // vector.
         for (uint32_t digit = 0; digit < DIGITS; digit += 1)
             fn(digit, phi, digitLabels[digit]);
     }
@@ -58,6 +60,8 @@ private:
             uint32_t label;
             assert(stream >> label);
 
+            // For each set of labels, add the current example as a positive if
+            // the label matches and as a negative if it doesn't.
             for (uint32_t digit = 0; digit < DIGITS; digit += 1)
                 digitLabels[digit].push_back(label == digit ? +1 : -1);
         }
