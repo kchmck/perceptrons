@@ -13,12 +13,6 @@ typedef std::function<double(const Vec &x, const Vec &y)> KernelFn;
 namespace kernel {
     KernelFn poly(double d) {
         return [=](const Vec &x, const Vec &y) {
-            return pow(x.dot(y), d);
-        };
-    }
-
-    KernelFn polyExt(double d) {
-        return [=](const Vec &x, const Vec &y) {
             return pow(1 + x.dot(y), d);
         };
     }
