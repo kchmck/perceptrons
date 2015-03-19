@@ -13,7 +13,9 @@ static constexpr uint32_t DIGITS = 10;
 class DigitData {
 private:
     static constexpr size_t FEATURES = 64;
+
     typedef std::function<void(uint32_t, const Phi &, const Labels &)> DigitIterFn;
+    typedef std::function<void(const Vec &)> ExampleIterFn;
 
 public:
     Phi phi;
@@ -32,6 +34,15 @@ public:
         // vector.
         for (uint32_t digit = 0; digit < DIGITS; digit += 1)
             fn(digit, phi, digitLabels[digit]);
+    }
+
+    void iterExamples(uint32_t digit, const ExampleIterFn &fn) const {
+        for (size_t i = 0; i < phi.size(); i += 1) {
+            if (digitLabels[digit][i] < 0)
+                continue;
+
+            fn(phi[i]);
+        }
     }
 
 private:

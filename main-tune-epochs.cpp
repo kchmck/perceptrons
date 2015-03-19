@@ -34,18 +34,14 @@ int main() {
 
         // For each digit class in the development data, calculate the overall
         // accuracy with the current epoch.
-        develData.iterDigits([&](uint32_t d, const Phi &phi, const Labels &labels) {
-            // Consider each example that's part of the current digit class.
-            for (size_t i = 0; i < phi.size(); i += 1) {
-                if (labels[i] < 0)
-                    continue;
-
+        for (uint32_t d = 0; d < DIGITS; d += 1) {
+            develData.iterExamples(d, [&](const Vec &x) {
                 // Tracks the maximum score over the 10 perceptrons.
                 MaxTracker<uint32_t, double> maxScore;
 
                 // Evaluate each perceptron.
                 for (uint32_t p = 0; p < DIGITS; p += 1)
-                    maxScore.consider(p, perceps[p].eval(phi[i]));
+                    maxScore.consider(p, perceps[p].eval(x));
 
                 // The example was classified correctly if the perceptron with
                 // the maximum score was the one trained for the current digit
@@ -54,8 +50,8 @@ int main() {
                     correct += 1;
 
                 total += 1;
-            }
-        });
+            });
+        }
 
         printf("%u:%u/%u\n", epochs, correct, total);
         maxAcc.consider(epochs, (double) correct / (double) total);
