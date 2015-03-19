@@ -1,8 +1,13 @@
 #ifndef UTIL_HPP
 #define UTIL_HPP
 
+#include <cinttypes>
 #include <cmath>
 #include <limits>
+#include <vector>
+
+#include "digits.hpp"
+#include "vec.hpp"
 
 static inline int sgn(double x) {
     return (int) copysign(1.0, x);
@@ -27,6 +32,52 @@ public:
         if (v > val) {
             key = k;
             val = v;
+        }
+    }
+};
+
+template<typename Percep>
+class AccTester {
+private:
+    const std::vector<Percep> &perceps;
+    const DigitData &data;
+
+public:
+    uint32_t correct, total;
+
+public:
+    AccTester(const std::vector<Percep> &perceps_, const DigitData &data_):
+        perceps(perceps_),
+        data(data_),
+        correct(0),
+        total(0)
+    {
+        run();
+    }
+
+    inline double acc() const { return (double) correct / (double) total; }
+
+private:
+    void run() {
+        // For each digit class in the development data, calculate the overall
+        // accuracy with the current epoch.
+        for (uint32_t d = 0; d < DIGITS; d += 1) {
+            data.iterExamples(d, [&](const Vec &x) {
+                // Tracks the maximum score over the 10 perceptrons.
+                MaxTracker<uint32_t, double> maxScore;
+
+                // Evaluate each perceptron.
+                for (uint32_t p = 0; p < DIGITS; p += 1)
+                    maxScore.consider(p, perceps[p].eval(x));
+
+                // The example was classified correctly if the perceptron with
+                // the maximum score was the one trained for the current digit
+                // class.
+                if (maxScore.key == d)
+                    correct += 1;
+
+                total += 1;
+            });
         }
     }
 };
