@@ -28,10 +28,10 @@ int main() {
             perceps.emplace_back(phi, labels, epochs);
         });
 
-        const AccTester<perceptron::Basic> t(perceps, develData);
+        const AccTester<perceptron::Basic> at(perceps, develData);
 
-        printf("%u:%u/%u (%f)\n", epochs, t.correct, t.total, t.acc());
-        maxAcc.consider(epochs, t.acc());
+        printf("%u:%u/%u (%f)\n", epochs, at.correct, at.total, at.acc());
+        maxAcc.consider(epochs, at.acc());
     }
 
     printf("acc:%u:%f\n", maxAcc.key, maxAcc.val);
