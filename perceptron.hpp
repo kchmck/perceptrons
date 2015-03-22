@@ -97,7 +97,7 @@ namespace perceptron {
             return weights.dot(x);
         }
 
-        void finish() { weights.norm_mut(); }
+        void finish() override { weights.norm_mut(); }
 
     // HACK: there's a bug in gcc (#58972) that lambdas can't access
     // private/protected members, so this has to be public.
