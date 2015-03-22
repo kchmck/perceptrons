@@ -37,12 +37,9 @@ public:
     }
 
     void iterExamples(uint32_t digit, const ExampleIterFn &fn) const {
-        for (size_t i = 0; i < phi.size(); i += 1) {
-            if (digitLabels[digit][i] < 0)
-                continue;
-
-            fn(phi[i]);
-        }
+        for (size_t i = 0; i < phi.size(); i += 1)
+            if (digitLabels[digit][i] > 0)
+                fn(phi[i]);
     }
 
 private:
