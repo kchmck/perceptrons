@@ -16,12 +16,14 @@ int main() {
     };
 
     const Labels labels {+1, +1, +1, +1, -1, -1, -1, -1};
+    auto fn = kernel::poly(1.0);
 
     auto a = perceptron::Basic(phi, labels, 10);
     auto b = perceptron::Averaged(phi, labels, 10);
-    auto c = perceptron::AveragedKernel(phi, labels, 10, kernel::poly(2));
+    auto c = perceptron::Kernel(phi, labels, 10, fn);
+    auto d = perceptron::AveragedKernel(phi, labels, 10, fn);
 
     for (auto x : phi) {
-        printf("%f:%f:%f\n", a.eval(x), b.eval(x), c.eval(x));
+        printf("%f:%f:%f:%f\n", a.eval(x), b.eval(x), c.eval(x), d.eval(x));
     }
 }
