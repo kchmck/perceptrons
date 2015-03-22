@@ -61,6 +61,7 @@ stage2: stage1
 
 $(DEPS):
 	$(COMPILE) -MM $(MAIN) >$@
+.PHONY: $(DEPS)
 
 ifeq ($(STAGE),2)
 include $(DEPS)
