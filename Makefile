@@ -1,6 +1,7 @@
 MAIN = \
     main-validate.cpp \
     main-tune-epochs.cpp \
+    main-tune-degrees.cpp \
 
 SRC =
 
@@ -71,6 +72,9 @@ main-validate: main-validate.o
 	$(LINK)
 
 main-tune-epochs: main-tune-epochs.o
+	$(LINK)
+
+main-tune-degrees: main-tune-degrees.o
 	$(LINK)
 
 %.o: %.cpp

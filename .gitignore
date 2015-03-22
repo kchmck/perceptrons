@@ -4,3 +4,4 @@
 Makefile.deps
 main-validate
 main-tune-epochs
+main-tune-degrees
