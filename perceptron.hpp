@@ -150,7 +150,7 @@ namespace perceptron {
                const KernelFn &fn_):
             Base(phi_, labels_, epochs_),
             fn(fn_),
-            alphas(phi.size(), 0)
+            alphas(phi.size(), 0.0)
         {
             run();
         }
