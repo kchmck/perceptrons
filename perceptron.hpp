@@ -11,10 +11,13 @@
 #include "vec.hpp"
 
 namespace perceptron {
+    // An abstract base class for perceptron common stuff.
     class Base {
     protected:
+        // The associated examples and labels.
         const Phi &phi;
         const Labels &labels;
+        // The maximum number of epochs.
         const uint32_t epochs;
 
     protected:
@@ -26,6 +29,7 @@ namespace perceptron {
             assert(phi.size() == labels.size());
         }
 
+        // Perform the main perceptron loop for the maximum number of epochs.
         void loop() {
             for (uint32_t epoch = 0; epoch < epochs; epoch += 1) {
                 bool converged = true;
@@ -39,26 +43,32 @@ namespace perceptron {
             }
         }
 
+        // Perform the inner function of the perceptron loop.
         virtual bool inner(size_t i) = 0;
+        // Evaluate the example with the learned parameters.
         virtual double eval(const Vec &x) const = 0;
-
+        // Do any final processing on the learned parameters.
         virtual void finish() {}
 
     public:
+        // Run the perceptron.
         void run() {
             loop();
             finish();
         }
     };
 
+    // Handles the averaging part of the averaged perceptron.
     class Averager {
     private:
         typedef std::function<bool()> InnerFn;
 
     public:
+        // The average accumulator.
         Vec avg;
 
     private:
+        // The average divisor.
         uint32_t counter;
 
     public:
@@ -67,6 +77,8 @@ namespace perceptron {
             counter(0)
         {}
 
+        // Run the inner part of the averaged perceptron loop, wrapping the
+        // given function and accumulating the given vector.
         bool handle(const Vec &accum, const InnerFn &innerFn) {
             bool converged = innerFn();
 
@@ -76,11 +88,13 @@ namespace perceptron {
             return converged;
         }
 
+        // Finish processing the average vector.
         void finish() {
             avg.div_in((double) counter);
         }
     };
 
+    // The most basic perceptron.
     class Basic: public Base {
     public:
         Vec weights;
@@ -97,6 +111,7 @@ namespace perceptron {
             return weights.dot(x);
         }
 
+        // Normalize the weights vector.
         void finish() override { weights.norm_mut(); }
 
     // HACK: there's a bug in gcc (#58972) that lambdas can't access
@@ -112,6 +127,7 @@ namespace perceptron {
         }
     };
 
+    // The averaged perceptron.
     class Averaged: public Basic {
     protected:
         Averager averager;
@@ -138,6 +154,7 @@ namespace perceptron {
         }
     };
 
+    // The normal kernel perceptron.
     class Kernel: public Base {
     protected:
         const KernelFn &fn;
@@ -159,6 +176,7 @@ namespace perceptron {
             return eval(alphas, x);
         }
 
+    // HACK: same as above.
     public:
         bool inner(size_t i) override {
             if (sgn(eval(alphas, phi[i])) != labels[i]) {
@@ -170,6 +188,8 @@ namespace perceptron {
         }
 
     protected:
+        // Evaluate the given feature vector with the given alphas using the
+        // current examples and labels.
         double eval(const Vec &alphas_, const Vec &x) const {
             double sum = 0.0;
 
@@ -180,6 +200,7 @@ namespace perceptron {
         }
     };
 
+    // The averaged kernel perceptron.
     class AveragedKernel: public Kernel {
     protected:
         Averager averager;
