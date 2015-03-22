@@ -12,8 +12,6 @@ OBJ = $(SRC:.cpp=.o)
 DEPS = Makefile.deps
 DATS = train.dat devel.dat test.dat
 
-STAGES = 2
-
 ACPPFLAGS += -Wall -Wextra -Werror -std=c++11 -pipe
 ACPPFLAGS += -Wshadow -Wpointer-arith -Wcast-qual \
              -Wconversion -Wformat=2 -Wstrict-overflow=5 \
@@ -47,27 +45,13 @@ endif
 COMPILE = $(CXX) $(ACPPFLAGS)
 LINK = $(CXX) -o $@ $^ $(ACPPFLAGS) $(ALDFLAGS)
 
-ifeq ($(STAGE),)
-all: stage$(STAGES)
-else ifeq ($(STAGE),1)
-all: $(DEPS)
-else ifeq ($(STAGE),2)
 all: $(BINARY) $(DATS)
-endif
-
-stage1:
-	$(MAKE) STAGE=1
-
-stage2: stage1
-	$(MAKE) STAGE=2
 
 $(DEPS):
 	$(COMPILE) -MM $(MAIN) >$@
 .PHONY: $(DEPS)
 
-ifeq ($(STAGE),2)
 include $(DEPS)
-endif
 
 main-validate: main-validate.o
 	$(LINK)
