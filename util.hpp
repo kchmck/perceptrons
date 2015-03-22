@@ -9,17 +9,20 @@
 #include "digits.hpp"
 #include "vec.hpp"
 
+// Calculate f(x) = +1 if x >= 0 and f(x) = -1 if x < 0 (or x = -0).
 static inline int sgn(double x) {
     return (int) copysign(1.0, x);
 }
 
-// This started out as a std::pair, but it became repeated enough to warrant its
-// own class. I tried to subclass pair, but its assignment operator wasn't
-// working.
+// Tracks a maximum value and associates it with the "key" that led to it. This
+// started out as a std::pair, but it became repeated enough to warrant its own
+// class. I tried to subclass pair, but its assignment operator wasn't working.
 template<typename Key, typename Val>
 class MaxTracker {
 public:
+    // The associated key.
     Key key;
+    // The maximum value.
     Val val;
 
 public:
@@ -28,6 +31,7 @@ public:
         val(std::numeric_limits<Val>::min())
     {}
 
+    // Possibly update the maximum value with the given values.
     void consider(Key k, Val v) {
         if (v > val) {
             key = k;
