@@ -38,7 +38,7 @@ public:
         for (size_t i = 0; i < size(); i += 1)
             sum += pow(operator[](i), 2);
 
-        return sum;
+        return sqrt(sum);
     }
 
     void norm_mut() {
