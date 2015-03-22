@@ -1,0 +1,6 @@
+*.dat
+*.log
+*.o
+Makefile.deps
+main-validate
+main-tune-epochs
