@@ -26,7 +26,7 @@ namespace kernel {
     }
 
     KernelFn normalize(const KernelFn &fn) {
-        return [&](const Vec &x, const Vec &y) {
+        return [=](const Vec &x, const Vec &y) {
             return fn(x,y) / sqrt(fn(x,x) * fn(y,y));
         };
     }
