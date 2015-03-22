@@ -16,6 +16,8 @@ int main() {
 
     const Labels labels({+1, +1, +1, +1, -1, -1, -1, -1});
 
-    const perceptron::Basic bp(phi, labels, 10);
-    const perceptron::Kernel kp(phi, labels, 10, kernel::poly(phi, 2));
+    auto bp = perceptron::Basic(phi, labels, 10).run();
+    auto ap = perceptron::Averaged(phi, labels, 10).run();
+    auto kp = perceptron::Kernel(phi, labels, 10, kernel::poly(phi, 2)).run();
+    auto akp = perceptron::AveragedKernel(phi, labels, 10, kernel::poly(phi, 2)).run();
 }

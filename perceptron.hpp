@@ -1,8 +1,9 @@
 #ifndef PERCEPTRON_HPP
 #define PERCEPTRON_HPP
 
-#include <cmath>
 #include <cinttypes>
+#include <cmath>
+#include <functional>
 
 #include "kernel.hpp"
 #include "vec.hpp"
@@ -27,7 +28,7 @@ namespace perceptron {
             assert(phi.size() == labels.size());
         }
 
-        void run() {
+        void loop() {
             for (uint32_t epoch = 0; epoch < epochs; epoch += 1) {
                 bool converged = true;
 
@@ -40,54 +41,61 @@ namespace perceptron {
         }
 
         virtual bool inner(size_t i) = 0;
+        virtual Vec finish() = 0;
+
+    public:
+        Vec run() {
+            loop();
+            return finish();
+        }
     };
 
-    class AbstractAveraged: public Abstract {
+    class Averager {
     private:
-        uint32_t counter;
+        typedef std::function<bool()> InnerFn;
 
     public:
         Vec avg;
 
+    private:
+        uint32_t counter;
+
     public:
-        AbstractAveraged(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
-            Abstract(phi_, labels_, epochs_),
-            counter(0),
-            avg(phi[0].size(), 0.0)
+        Averager(size_t n):
+            avg(n, 0.0),
+            counter(0)
         {}
 
-    protected:
-        void run() {
-            Abstract::run();
-            avg.div_in((double) counter);
-        }
+        bool handle(const Vec &accum, const InnerFn &innerFn) {
+            bool converged = innerFn();
 
-        bool inner(size_t i) {
-            bool converged = innerinner(i);
-
-            average();
             counter += 1;
+            avg.add_in(accum);
 
             return converged;
         }
 
-        virtual bool innerinner(size_t i) = 0;
-        virtual void average() = 0;
+        Vec finish() {
+            avg.div_in((double) counter);
+            return std::move(avg);
+        }
     };
 
     class Basic: public Abstract {
-    public:
+    protected:
         Vec weights;
 
     public:
         Basic(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
             Abstract(phi_, labels_, epochs_),
             weights(phi[0].size(), 0.0)
-        {
-            run();
-        }
+        {}
 
-    private:
+        Vec finish() { return std::move(weights); }
+
+    // HACK: there's a bug in gcc (#58972) that lambdas can't access
+    // private/protected members, so this has to be public.
+    public:
         bool inner(size_t i) {
             if (sgn(weights.dot(phi[i])) != labels[i]) {
                 weights.add_in(phi[i].mult(labels[i]));
@@ -98,58 +106,30 @@ namespace perceptron {
         }
     };
 
-    class Averaged: public AbstractAveraged {
-    private:
-        Vec weights;
+    class Averaged: public Basic {
+    protected:
+        Averager averager;
 
     public:
         Averaged(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
-            AbstractAveraged(phi_, labels_, epochs_),
-            weights(phi[0].size(), 0.0)
-        {
-            run();
-        }
-
-        bool innerinner(size_t i) {
-            if (sgn(weights.dot(phi[i])) != labels[i]) {
-                weights.add_in(phi[i].mult(labels[i]));
-                return false;
-            }
-
-            return true;
-        }
-
-        void average() {
-            avg.add_in(weights);
-        }
-    };
-
-    class KernelCalculator {
-    private:
-        const KernelFn &fn;
-
-    public:
-        Vec alphas;
-
-    public:
-        KernelCalculator(const KernelFn &fn_, size_t n):
-            fn(fn_),
-            alphas(n, 0)
+            Basic(phi_, labels_, epochs_),
+            averager(phi[0].size())
         {}
 
-        double calc(const Phi &phi, const Labels &labels, size_t i) {
-            double accum = 0.0;
+        Vec finish() { return averager.finish(); }
 
-            for (size_t j = 0; j < phi.size(); j += 1)
-                accum += alphas[j] * (double) labels[j] * fn(i, j);
-
-            return accum;
+    protected:
+        bool inner(size_t i) {
+            return averager.handle(weights, [&] {
+                return Basic::inner(i);
+            });
         }
     };
 
     class Kernel: public Abstract {
-    private:
-        const KernelCalculator kernel;
+    protected:
+        const KernelFn &fn;
+        Vec alphas;
 
     public:
         Kernel(const Phi &phi_, const Labels &labels_, uint32_t epochs_,
@@ -157,11 +137,11 @@ namespace perceptron {
             Abstract(phi_, labels_, epochs_),
             fn(fn_),
             alphas(phi.size(), 0)
-        {
-            run();
-        }
+        {}
 
-    private:
+        Vec finish() { return std::move(alphas); }
+
+    protected:
         double calc_sum(size_t i) {
             double sum = 0.0;
 
@@ -171,6 +151,7 @@ namespace perceptron {
             return sum;
         }
 
+    public:
         bool inner(size_t i) {
             if (sgn(calc_sum(i)) != labels[i]) {
                 alphas[i] += 1;
@@ -181,24 +162,24 @@ namespace perceptron {
         }
     };
 
-    class AveragedKernel: public Abstract {
-    private:
-        const KernelCalculator kernel;
+    class AveragedKernel: public Kernel {
+    protected:
+        Averager averager;
 
     public:
         AveragedKernel(const Phi &phi_, const Labels &labels_, uint32_t epochs_,
                        const KernelFn &fn_):
-            Abstract(phi_, labels_, epochs_),
-            kernel(fn_, phi[0].size())
-        {
-            run();
-        }
+            Kernel(phi_, labels_, epochs_, fn_),
+            averager(phi.size())
+        {}
 
-        bool innerinner(size_t i) {
-        }
+        Vec finish() { return averager.finish(); }
 
-        void average() {
-            avg.add_in(alphas);
+    protected:
+        bool inner(size_t i) {
+            return averager.handle(alphas, [&] {
+                return Kernel::inner(i);
+            });
         }
     };
 }
