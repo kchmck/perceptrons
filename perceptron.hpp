@@ -92,6 +92,11 @@ namespace perceptron {
         void finish() {
             avg.div_in((double) counter);
         }
+
+        // Normalize the average vector.
+        void normalize() {
+            avg.normalize();
+        }
     };
 
     // The most basic perceptron.
@@ -140,7 +145,10 @@ namespace perceptron {
             run();
         }
 
-        void finish() override { averager.finish(); }
+        void finish() override {
+            averager.finish();
+            averager.normalize();
+        }
 
         double eval(const Vec &x) const override {
             return averager.avg.dot(x);
