@@ -17,7 +17,7 @@ run() {
 
     awk '{print $1}' test >test.labels
     paste test.labels out-{0..9} >test.csv
-./eval.py test.csv
+    ./eval.py test.csv
 }
 
 echo polynomial
