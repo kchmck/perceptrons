@@ -165,6 +165,8 @@ namespace perceptron {
     // The normal kernel perceptron.
     class Kernel: public Base {
     protected:
+        typedef std::function<void(double)> SupportIterFn;
+
         const CachedKernel &fn;
 
     public:
@@ -182,6 +184,13 @@ namespace perceptron {
 
         double eval(const Vec &x) const override {
             return eval(alphas, x);
+        }
+
+        void iterSupport(const SupportIterFn &sfn) const {
+            for (auto a : alphas)
+                // BAD: exact float comparison.
+                if (a != 0.0)
+                    sfn(a);
         }
 
     // HACK: same as above.
@@ -236,6 +245,12 @@ namespace perceptron {
 
         double eval(const Vec &x) const override {
             return Kernel::eval(averager.avg, x);
+        }
+
+        void iterSupport(const SupportIterFn &sfn) const {
+            for (auto a : averager.avg)
+                if (a != 0.0)
+                    sfn(a);
         }
 
     protected:
