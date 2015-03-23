@@ -186,6 +186,7 @@ namespace perceptron {
             return eval(alphas, x);
         }
 
+        // Call the given function for each element in the support vector.
         void iterSupport(const SupportIterFn &sfn) const {
             for (auto a : alphas)
                 // BAD: exact float comparison.
@@ -216,7 +217,8 @@ namespace perceptron {
             return sum;
         }
 
-
+        // Evaluate the training example at the given index using the
+        // precomputed kernel.
         double eval_cached(const Vec &alphas_, size_t i) const {
             double sum = 0.0;
 
@@ -247,6 +249,8 @@ namespace perceptron {
             return Kernel::eval(averager.avg, x);
         }
 
+        // Call the given function on each element in the averaged support
+        // vector.
         void iterSupport(const SupportIterFn &sfn) const {
             for (auto a : averager.avg)
                 if (a != 0.0)

@@ -9,6 +9,7 @@
 #include "util.hpp"
 #include "vec.hpp"
 
+// Print out the support vector elements of the given perceptrons.
 template<typename P>
 void printSupportVectors(const std::vector<P> &perceps) {
     for (auto &p : perceps) {
@@ -20,6 +21,7 @@ void printSupportVectors(const std::vector<P> &perceps) {
     }
 }
 
+// Print out the given confusion matrix.
 template<typename P>
 void printConfusion(const Confusion<P> &c) {
     for (auto &row : c) {
