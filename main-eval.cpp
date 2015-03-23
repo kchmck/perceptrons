@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <fstream>
 
 #include "best.hpp"
@@ -17,7 +18,7 @@ void printSupportVectors(const std::vector<P> &perceps) {
             printf("%02zu:%f ", i, a);
         });
 
-        printf("\n");
+        putchar('\n');
     }
 }
 
