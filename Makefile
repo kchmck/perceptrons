@@ -46,9 +46,8 @@ LINK = $(CXX) -o $@ $^ $(ACPPFLAGS) $(ALDFLAGS)
 
 all: $(BINARY) $(DATS)
 
-$(DEPS):
-	$(COMPILE) -MM $(MAIN) >$@
-.PHONY: $(DEPS)
+$(DEPS): $(MAIN)
+	$(COMPILE) -MM $^ >$@
 
 include $(DEPS)
 
