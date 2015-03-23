@@ -23,10 +23,6 @@ ACPPFLAGS += $(CPPFLAGS)
 ALDFLAGS += -lm
 ALDFLAGS += $(LDFLAGS)
 
-ifeq ($(DEBUG), 1)
-    ACPPFLAGS += -O0 -g
-endif
-
 ifeq ($(OPTIMIZE), 1)
     ACPPFLAGS += -flto -O2
     ALDFLAGS += -flto -O2
@@ -40,6 +36,11 @@ endif
 ifeq ($(PROFILE), 1)
     ACPPFLAGS += -g -O0 -pg
     ALDFLAGS += -g -pg
+endif
+
+ifeq ($(DEBUG), 1)
+    ACPPFLAGS += -O0 -g
+    ALDFLAGS += -O0 -g
 endif
 
 COMPILE = $(CXX) $(ACPPFLAGS)
