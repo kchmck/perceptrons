@@ -12,7 +12,7 @@ OBJ = $(SRC:.cpp=.o)
 DEPS = Makefile.deps
 DATS = train.dat devel.dat test.dat
 
-ACPPFLAGS += -Wall -Wextra -Werror -std=c++11 -pipe
+ACPPFLAGS += -Wall -Wextra -Werror -std=c++14 -pipe
 ACPPFLAGS += -Wshadow -Wpointer-arith -Wcast-qual \
              -Wconversion -Wformat=2 -Wstrict-overflow=5 \
              -Wno-missing-braces -Wstrict-aliasing \
