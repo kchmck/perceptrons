@@ -186,12 +186,9 @@ namespace perceptron {
             return eval(alphas, x);
         }
 
-        // Call the given function for each element in the support vector.
-        void iterSupport(const SupportIterFn &sfn) const {
-            for (size_t i = 0; i < alphas.size(); i += 1)
-                // BAD: exact float comparison.
-                if (alphas[i] != 0.0)
-                    sfn(i, alphas[i]);
+        // Count the number of elements in the support vector.
+        uint32_t countSupports() const {
+            return countSupports(alphas);
         }
 
     // HACK: same as above.
@@ -227,6 +224,17 @@ namespace perceptron {
 
             return sum;
         }
+
+        // Count the number of nonzero elements in the given vector.
+        uint32_t countSupports(const Vec &alphas_) const {
+            uint32_t sum = 0;
+
+            for (auto a : alphas_)
+                if (a != 0.0)
+                    sum += 1;
+
+            return sum;
+        }
     };
 
     // The averaged kernel perceptron.
@@ -249,12 +257,9 @@ namespace perceptron {
             return Kernel::eval(averager.avg, x);
         }
 
-        // Call the given function on each element in the averaged support
-        // vector.
-        void iterSupport(const SupportIterFn &sfn) const {
-            for (size_t i = 0; i < averager.avg.size(); i += 1)
-                if (averager.avg[i] != 0.0)
-                    sfn(i, averager.avg[i]);
+        // Count the number of elements in the averaged support vector.
+        uint32_t countSupports() const {
+            return Kernel::countSupports(averager.avg);
         }
 
     protected:

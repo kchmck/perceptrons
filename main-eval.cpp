@@ -13,13 +13,8 @@
 // Print out the support vector elements of the given perceptrons.
 template<typename P>
 void printSupportVectors(const std::vector<P> &perceps) {
-    for (auto &p : perceps) {
-        p.iterSupport([](auto i, auto a) {
-            printf("%02zu:%f ", i, a);
-        });
-
-        putchar('\n');
-    }
+    for (uint32_t p = 0; p < DIGITS; p += 1)
+        printf("%02u:%03u\n", p, perceps[p].countSupports());
 }
 
 // Print out the given confusion matrix.
