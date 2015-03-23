@@ -5,10 +5,7 @@ MAIN = \
     main-tune-widths.cpp \
     main-eval.cpp \
 
-SRC =
-
 BINARY = $(MAIN:.cpp=)
-OBJ = $(SRC:.cpp=.o)
 
 DEPS = Makefile.deps
 DATS = train.dat devel.dat test.dat
@@ -83,7 +80,7 @@ test.dat:
 	cp optdigits.tes $@
 
 clean:
-	-rm -f $(OBJ) $(DEPS)
+	-rm -f *.o $(DEPS)
 
 distclean: clean
 	-rm -f $(BINARY)
