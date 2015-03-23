@@ -30,7 +30,7 @@ public:
 private:
     void fill(const DigitData &data_, const std::vector<P> &perceps) {
         for (uint32_t digit = 0; digit < DIGITS; digit += 1) {
-            data_.iterExamples(digit, [&](auto x) {
+            data_.iterExamples(digit, [&](auto &x) {
                 MaxTracker<uint32_t, double> maxScore;
 
                 for (uint32_t p = 0; p < DIGITS; p += 1)
