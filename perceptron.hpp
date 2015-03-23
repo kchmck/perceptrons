@@ -165,7 +165,7 @@ namespace perceptron {
     // The normal kernel perceptron.
     class Kernel: public Base {
     protected:
-        typedef std::function<void(double)> SupportIterFn;
+        typedef std::function<void(size_t, double)> SupportIterFn;
 
         const CachedKernel &fn;
 
@@ -188,10 +188,10 @@ namespace perceptron {
 
         // Call the given function for each element in the support vector.
         void iterSupport(const SupportIterFn &sfn) const {
-            for (auto a : alphas)
+            for (size_t i = 0; i < alphas.size(); i += 1)
                 // BAD: exact float comparison.
-                if (a != 0.0)
-                    sfn(a);
+                if (alphas[i] != 0.0)
+                    sfn(i, alphas[i]);
         }
 
     // HACK: same as above.
@@ -252,9 +252,9 @@ namespace perceptron {
         // Call the given function on each element in the averaged support
         // vector.
         void iterSupport(const SupportIterFn &sfn) const {
-            for (auto a : averager.avg)
-                if (a != 0.0)
-                    sfn(a);
+            for (size_t i = 0; i < averager.avg.size(); i += 1)
+                if (averager.avg[i] != 0.0)
+                    sfn(i, averager.avg[i]);
         }
 
     protected:

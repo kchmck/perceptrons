@@ -13,8 +13,8 @@
 template<typename P>
 void printSupportVectors(const std::vector<P> &perceps) {
     for (auto &p : perceps) {
-        p.iterSupport([](auto a) {
-            printf("%02f ", a);
+        p.iterSupport([](auto i, auto a) {
+            printf("%02zu:%f ", i, a);
         });
 
         printf("\n");
