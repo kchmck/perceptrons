@@ -20,7 +20,7 @@ int main() {
     MaxTracker<double, double> kernMaxAcc, avgMaxAcc;
 
     for (auto width : WIDTHS) {
-        auto fn = kernel::normalize(kernel::gaussian(width));
+        auto fn = CachedKernel(trainData.phi, kernel::normalize(kernel::poly(width)));
 
         std::vector<perceptron::Kernel> kernPerceps;
         std::vector<perceptron::AveragedKernel> avgPerceps;

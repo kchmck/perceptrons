@@ -157,14 +157,14 @@ namespace perceptron {
     // The normal kernel perceptron.
     class Kernel: public Base {
     protected:
-        const KernelFn &fn;
+        const CachedKernel &fn;
 
     public:
         Vec alphas;
 
     public:
         Kernel(const Phi &phi_, const Labels &labels_, uint32_t epochs_,
-               const KernelFn &fn_):
+               const CachedKernel &fn_):
             Base(phi_, labels_, epochs_),
             fn(fn_),
             alphas(phi.size(), 0.0)
@@ -179,7 +179,7 @@ namespace perceptron {
     // HACK: same as above.
     public:
         bool inner(size_t i) override {
-            if (sgn(eval(alphas, phi[i])) != labels[i]) {
+            if (sgn(eval_cached(alphas, i)) != labels[i]) {
                 alphas[i] += 1;
                 return false;
             }
@@ -198,6 +198,16 @@ namespace perceptron {
 
             return sum;
         }
+
+
+        double eval_cached(const Vec &alphas_, size_t i) const {
+            double sum = 0.0;
+
+            for (size_t j = 0; j < phi.size(); j += 1)
+                sum += (double) alphas_[j] * (double) labels[j] * fn(i, j);
+
+            return sum;
+        }
     };
 
     // The averaged kernel perceptron.
@@ -207,7 +217,7 @@ namespace perceptron {
 
     public:
         AveragedKernel(const Phi &phi_, const Labels &labels_, uint32_t epochs_,
-                       const KernelFn &fn_):
+                       const CachedKernel &fn_):
             Kernel(phi_, labels_, epochs_, fn_),
             averager(phi.size())
         {

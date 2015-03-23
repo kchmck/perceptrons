@@ -4,11 +4,43 @@
 #include <cinttypes>
 #include <cmath>
 #include <functional>
+#include <vector>
 
 #include "util.hpp"
 #include "vec.hpp"
 
 typedef std::function<double(const Vec &x, const Vec &y)> KernelFn;
+
+class CachedKernel {
+private:
+    const KernelFn fn;
+    const size_t n;
+    std::vector<double> cache;
+
+public:
+    CachedKernel(const Phi &phi, const KernelFn fn_):
+        fn(fn_),
+        n(phi.size()),
+        cache(n * n)
+    {
+        build(phi);
+    }
+
+    inline double operator()(size_t xi, size_t yi) const {
+        return cache.at(xi * n + yi);
+    }
+
+    inline double operator()(const Vec &x, const Vec &y) const {
+        return fn(x, y);
+    }
+
+private:
+    void build(const Phi &phi) {
+        for (size_t i = 0; i < phi.size(); i += 1)
+            for (size_t j = 0; j < phi.size(); j += 1)
+                cache.at(i * n + j) = fn(phi[i], phi[j]);
+    }
+};
 
 namespace kernel {
     // Get a polynomial kernel of the given degree.

@@ -21,7 +21,7 @@ int main() {
     MaxTracker<double, double> kernMaxAcc, avgMaxAcc;
 
     for (auto deg : DEGREES) {
-        auto fn = kernel::normalize(kernel::poly(deg));
+        auto fn = CachedKernel(trainData.phi, kernel::normalize(kernel::poly(deg)));
 
         // Perceptrons trained for each digit class.
         std::vector<perceptron::Kernel> kernPerceps;
