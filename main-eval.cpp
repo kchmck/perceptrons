@@ -28,6 +28,12 @@ static void printConfusion(const Confusion<P> &c) {
     }
 }
 
+// Print out accuracy.
+template<typename P>
+static void printAcc(const Confusion<P> &c) {
+    printf("acc:%f\n", c.acc());
+}
+
 int main() {
     std::fstream trainStream("train.dat");
     const DigitData trainData(trainStream);
@@ -90,28 +96,34 @@ int main() {
     printf("computing basic confusion...\n");
     const Confusion<perceptron::Linear> basicCon(testData, basicPerceps);
     printConfusion(basicCon);
+    printAcc(basicCon);
 
     printf("computing avg confusion...\n");
     const Confusion<perceptron::Averaged> avgCon(testData, avgPerceps);
     printConfusion(avgCon);
+    printAcc(avgCon);
 
     printf("computing poly confusion...\n");
     const Confusion<perceptron::Kernel> polyCon(testData, polyPerceps);
     printConfusion(polyCon);
     printSupportVectors(polyPerceps);
+    printAcc(polyCon);
 
     printf("computing gaus confusion...\n");
     const Confusion<perceptron::Kernel> gausCon(testData, gausPerceps);
     printConfusion(gausCon);
+    printAcc(gausCon);
     printSupportVectors(gausPerceps);
 
     printf("computing avg poly confusion...\n");
     const Confusion<perceptron::AveragedKernel> avgPolyCon(testData, avgPolyPerceps);
     printConfusion(avgPolyCon);
+    printAcc(avgPolyCon);
     printSupportVectors(avgPolyPerceps);
 
     printf("computing avg gaus confusion...\n");
     const Confusion<perceptron::AveragedKernel> avgGausCon(testData, avgGausPerceps);
     printConfusion(avgGausCon);
+    printAcc(avgGausCon);
     printSupportVectors(avgGausPerceps);
 }
