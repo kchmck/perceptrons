@@ -1,3 +1,4 @@
+#include <cstdio>
 #include <fstream>
 
 #include "confusion.hpp"
