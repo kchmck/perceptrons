@@ -28,7 +28,7 @@ int main() {
         std::vector<perceptron::Kernel> kernPerceps;
         std::vector<perceptron::AveragedKernel> avgPerceps;
 
-        trainData.iterDigits([&](uint32_t d, const Phi &phi, const Labels &labels) {
+        trainData.iterDigits([&](auto d, auto &phi, auto &labels) {
             printf("train %u\n", d);
 
             kernPerceps.emplace_back(phi, labels, best::EPOCHS, fn);

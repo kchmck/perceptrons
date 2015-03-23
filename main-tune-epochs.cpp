@@ -24,7 +24,7 @@ int main() {
         std::vector<perceptron::Linear> perceps;
 
         // Train a perceptron for each digit.
-        trainData.iterDigits([&](uint32_t d, const Phi &phi, const Labels &labels) {
+        trainData.iterDigits([&](auto d, auto &phi, auto &labels) {
             (void) d;
             perceps.emplace_back(phi, labels, epochs);
         });

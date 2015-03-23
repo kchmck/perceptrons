@@ -56,7 +56,7 @@ int main() {
         kernel::normalize(kernel::gaussian(best::WIDTH)));
 
     printf("training perceptrons...\n");
-    trainData.iterDigits([&](uint32_t d, const Phi &phi, const Labels &labels) {
+    trainData.iterDigits([&](auto d, auto &phi, auto &labels) {
         printf("  digit %u\n", d);
 
         basicTime.add([&] {
