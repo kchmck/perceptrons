@@ -12,14 +12,14 @@
 
 // Print out the support vector elements of the given perceptrons.
 template<typename P>
-void printSupportVectors(const std::vector<P> &perceps) {
+static void printSupportVectors(const std::vector<P> &perceps) {
     for (uint32_t p = 0; p < DIGITS; p += 1)
         printf("%02u:%03u\n", p, perceps[p].countSupports());
 }
 
 // Print out the given confusion matrix.
 template<typename P>
-void printConfusion(const Confusion<P> &c) {
+static void printConfusion(const Confusion<P> &c) {
     for (auto &row : c) {
         for (auto cell : row)
             printf("%03u ", cell);
