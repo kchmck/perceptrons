@@ -60,7 +60,7 @@ namespace kernel {
     }
 
     // Get a normalized kernel of the given kernel function.
-    KernelFn normalize(const KernelFn &fn) {
+    KernelFn normalize(const KernelFn fn) {
         return [=](const Vec &x, const Vec &y) {
             return fn(x,y) / sqrt(fn(x,x) * fn(y,y));
         };
