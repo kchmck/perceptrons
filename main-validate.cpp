@@ -18,7 +18,7 @@ int main() {
     const Labels labels {+1, +1, +1, +1, -1, -1, -1, -1};
     auto fn = CachedKernel(phi, kernel::poly(1.0));
 
-    auto a = perceptron::Basic(phi, labels, 10);
+    auto a = perceptron::Linear(phi, labels, 10);
     auto b = perceptron::Averaged(phi, labels, 10);
     auto c = perceptron::Kernel(phi, labels, 10, fn);
     auto d = perceptron::AveragedKernel(phi, labels, 10, fn);

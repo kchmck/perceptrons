@@ -26,7 +26,7 @@ int main() {
     std::fstream testStream("test.dat");
     const DigitData testData(testStream);
 
-    std::vector<perceptron::Basic> basicPerceps;
+    std::vector<perceptron::Linear> basicPerceps;
     std::vector<perceptron::Averaged> avgPerceps;
     std::vector<perceptron::Kernel> polyPerceps;
     std::vector<perceptron::Kernel> gausPerceps;
@@ -79,7 +79,7 @@ int main() {
     printf("avg gaus time: %" PRIuMAX "ns\n", avgGausTime.total);
 
     printf("computing basic confusion...\n");
-    const Confusion<perceptron::Basic> basicCon(testData, basicPerceps);
+    const Confusion<perceptron::Linear> basicCon(testData, basicPerceps);
     printConfusion(basicCon);
     printf("computing avg confusion...\n");
     const Confusion<perceptron::Averaged> avgCon(testData, avgPerceps);

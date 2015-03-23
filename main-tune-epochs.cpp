@@ -21,7 +21,7 @@ int main() {
 
     for (auto epochs : EPOCHS) {
         // Stores the perceptrons trained on each digit for the current epoch.
-        std::vector<perceptron::Basic> perceps;
+        std::vector<perceptron::Linear> perceps;
 
         // Train a perceptron for each digit.
         trainData.iterDigits([&](uint32_t d, const Phi &phi, const Labels &labels) {
@@ -29,7 +29,7 @@ int main() {
             perceps.emplace_back(phi, labels, epochs);
         });
 
-        const Confusion<perceptron::Basic> c(develData, perceps);
+        const Confusion<perceptron::Linear> c(develData, perceps);
 
         printf("%u:%u/%u (%f)\n", epochs, c.correct, c.total, c.acc());
         maxAcc.consider(epochs, c.acc());

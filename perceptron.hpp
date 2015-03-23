@@ -100,12 +100,12 @@ namespace perceptron {
     };
 
     // The most basic perceptron.
-    class Basic: public Base {
+    class Linear: public Base {
     public:
         Vec weights;
 
     public:
-        Basic(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
+        Linear(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
             Base(phi_, labels_, epochs_),
             weights(phi[0].size(), 0.0)
         {
@@ -133,13 +133,13 @@ namespace perceptron {
     };
 
     // The averaged perceptron.
-    class Averaged: public Basic {
+    class Averaged: public Linear {
     protected:
         Averager averager;
 
     public:
         Averaged(const Phi &phi_, const Labels &labels_, uint32_t epochs_):
-            Basic(phi_, labels_, epochs_),
+            Linear(phi_, labels_, epochs_),
             averager(phi[0].size())
         {
             run();
@@ -157,7 +157,7 @@ namespace perceptron {
     protected:
         bool inner(size_t i) override {
             return averager.handle(weights, [=] {
-                return Basic::inner(i);
+                return Linear::inner(i);
             });
         }
     };
