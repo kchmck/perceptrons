@@ -23,7 +23,7 @@ int main() {
     auto c = perceptron::Kernel(phi, labels, 10, fn);
     auto d = perceptron::AveragedKernel(phi, labels, 10, fn);
 
-    for (auto x : phi) {
-        printf("%f:%f:%f:%f\n", a.eval(x), b.eval(x), c.eval(x), d.eval(x));
+    for (auto &x : phi) {
+        printf("%f:%f:%f:%f\n", a.eval(x), c.eval(x), b.eval(x), d.eval(x));
     }
 }
