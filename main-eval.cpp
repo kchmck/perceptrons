@@ -49,12 +49,16 @@ int main() {
 
     Timer basicTime, avgTime, polyTime, gausTime, avgPolyTime, avgGausTime;
 
-    printf("precomputing poly kernel...\n");
+    printf("precomputing poly kernels...\n");
     auto polyFn = CachedKernel(trainData.phi,
-        kernel::normalize(kernel::poly(best::DEGREE)));
-    printf("precomputing gaus kernel...\n");
+        kernel::normalize(kernel::poly(best::NRM_DEGREE)));
+    auto avgPolyFn = CachedKernel(trainData.phi,
+        kernel::normalize(kernel::poly(best::AVG_DEGREE)));
+    printf("precomputing gaus kernels...\n");
     auto gausFn = CachedKernel(trainData.phi,
-        kernel::normalize(kernel::gaussian(best::WIDTH)));
+        kernel::normalize(kernel::gaussian(best::NRM_WIDTH)));
+    auto avgGausFn = CachedKernel(trainData.phi,
+        kernel::normalize(kernel::gaussian(best::AVG_WIDTH)));
 
     printf("training perceptrons...\n");
     trainData.iterDigits([&](auto d, auto &phi, auto &labels) {
@@ -77,11 +81,11 @@ int main() {
         });
 
         avgPolyTime.add([&] {
-            avgPolyPerceps.emplace_back(phi, labels, best::EPOCHS, polyFn);
+            avgPolyPerceps.emplace_back(phi, labels, best::EPOCHS, avgPolyFn);
         });
 
         avgGausTime.add([&] {
-            avgGausPerceps.emplace_back(phi, labels, best::EPOCHS, gausFn);
+            avgGausPerceps.emplace_back(phi, labels, best::EPOCHS, avgGausFn);
         });
     });
 
