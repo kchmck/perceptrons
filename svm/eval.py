@@ -26,7 +26,7 @@ with open(sys.argv[1], "r") as buf:
 
         total += 1
 
-print("{}/{} ({}%)".format(correct, total, correct / total))
+print("{}/{} ({}%)".format(correct, total, correct * 100 / total))
 
 for row in con:
     for col in row:
