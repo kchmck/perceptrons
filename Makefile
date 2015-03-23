@@ -86,7 +86,7 @@ distclean: clean
 	-rm -f $(BINARY)
 
 archive:
-	git archive master -o mick-parking.tar.gz \
-	    --prefix=mick-parking/
+	git archive master -o koch_mick.tar.gz \
+	    --prefix=koch_mick/
 
 .PHONY: all clean distclean archive
