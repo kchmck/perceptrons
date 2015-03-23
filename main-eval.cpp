@@ -9,6 +9,16 @@
 #include "util.hpp"
 #include "vec.hpp"
 
+template<typename P>
+void printConfusion(const Confusion<P> &c) {
+    for (auto &row : c) {
+        for (auto cell : row)
+            printf("%03u ", cell);
+
+        putchar('\n');
+    }
+}
+
 int main() {
     std::fstream trainStream("train.dat");
     const DigitData trainData(trainStream);
@@ -70,20 +80,20 @@ int main() {
 
     printf("computing basic confusion...\n");
     const Confusion<perceptron::Basic> basicCon(testData, basicPerceps);
-    basicCon.print(stdout);
+    printConfusion(basicCon);
     printf("computing avg confusion...\n");
     const Confusion<perceptron::Averaged> avgCon(testData, avgPerceps);
-    avgCon.print(stdout);
+    printConfusion(avgCon);
     printf("computing poly confusion...\n");
     const Confusion<perceptron::Kernel> polyCon(testData, polyPerceps);
-    polyCon.print(stdout);
+    printConfusion(polyCon);
     printf("computing gaus confusion...\n");
     const Confusion<perceptron::Kernel> gausCon(testData, gausPerceps);
-    gausCon.print(stdout);
+    printConfusion(gausCon);
     printf("computing avg poly confusion...\n");
     const Confusion<perceptron::AveragedKernel> avgPolyCon(testData, avgPolyPerceps);
-    avgPolyCon.print(stdout);
+    printConfusion(avgPolyCon);
     printf("computing avg gaus confusion...\n");
     const Confusion<perceptron::AveragedKernel> avgGausCon(testData, avgGausPerceps);
-    avgGausCon.print(stdout);
+    printConfusion(avgGausCon);
 }

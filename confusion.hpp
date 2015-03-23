@@ -27,15 +27,6 @@ public:
 
     inline double acc() const { return (double) correct / (double) total; }
 
-    void print(FILE *stream) const {
-        for (auto &row : *this) {
-            for (auto cell : row)
-                fprintf(stream, "%03u ", cell);
-
-            fputc('\n', stream);
-        }
-    }
-
 private:
     void fill(const DigitData &data_, const std::vector<P> &perceps) {
         for (uint32_t digit = 0; digit < DIGITS; digit += 1) {
