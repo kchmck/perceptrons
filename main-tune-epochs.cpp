@@ -1,5 +1,6 @@
 #include <fstream>
 
+#include "confusion.hpp"
 #include "digits.hpp"
 #include "perceptron.hpp"
 #include "util.hpp"
@@ -28,10 +29,10 @@ int main() {
             perceps.emplace_back(phi, labels, epochs);
         });
 
-        const AccTester<perceptron::Basic> at(perceps, develData);
+        const Confusion<perceptron::Basic> c(develData, perceps);
 
-        printf("%u:%u/%u (%f)\n", epochs, at.correct, at.total, at.acc());
-        maxAcc.consider(epochs, at.acc());
+        printf("%u:%u/%u (%f)\n", epochs, c.correct, c.total, c.acc());
+        maxAcc.consider(epochs, c.acc());
     }
 
     printf("acc:%u:%f\n", maxAcc.key, maxAcc.val);

@@ -1,6 +1,7 @@
 #include <fstream>
 
 #include "best.hpp"
+#include "confusion.hpp"
 #include "digits.hpp"
 #include "kernel.hpp"
 #include "perceptron.hpp"
@@ -36,16 +37,16 @@ int main() {
 
         // Test with the normal perceptrons.
         {
-            const AccTester<perceptron::Kernel> at(kernPerceps, develData);
-            printf("nrm\td:%f acc:%u/%u (%f)\n", deg, at.correct, at.total, at.acc());
-            kernMaxAcc.consider(deg, at.acc());
+            const Confusion<perceptron::Kernel> c(develData, kernPerceps);
+            printf("nrm\td:%f acc:%u/%u (%f)\n", deg, c.correct, c.total, c.acc());
+            kernMaxAcc.consider(deg, c.acc());
         }
 
         // Test with the averaged perceptrons.
         {
-            const AccTester<perceptron::AveragedKernel> at(avgPerceps, develData);
-            printf("avg\td:%f acc:%u/%u (%f)\n", deg, at.correct, at.total, at.acc());
-            avgMaxAcc.consider(deg, at.acc());
+            const Confusion<perceptron::AveragedKernel> c(develData, avgPerceps);
+            printf("avg\td:%f acc:%u/%u (%f)\n", deg, c.correct, c.total, c.acc());
+            avgMaxAcc.consider(deg, c.acc());
         }
     }
 
