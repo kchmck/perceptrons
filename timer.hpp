@@ -6,12 +6,13 @@
 #include <cinttypes>
 #include <functional>
 
+// Accumulates the time a function takes to execute.
 class Timer {
 public:
     typedef std::function<void()> TimeFn;
 
 public:
-    // Time in microseconds.
+    // Time in nanoseconds.
     uintmax_t total;
 
 public:
@@ -26,6 +27,8 @@ public:
 
         uintmax_t prev = total;
         total += (after - before).count();
+
+        // Check for overflow.
         assert(total >= prev);
     }
 };
