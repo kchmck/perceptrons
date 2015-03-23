@@ -112,7 +112,7 @@ namespace perceptron {
         }
 
         // Normalize the weights vector.
-        void finish() override { weights.norm_mut(); }
+        void finish() override { weights.normalize(); }
 
     // HACK: there's a bug in gcc (#58972) that lambdas can't access
     // private/protected members, so this has to be public.

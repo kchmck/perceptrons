@@ -47,7 +47,7 @@ public:
     }
 
     // Divide each element by the norm.
-    void norm_mut() {
+    void normalize() {
         double n = norm();
 
         for (size_t i = 0; i < size(); i += 1)
