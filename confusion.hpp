@@ -2,6 +2,7 @@
 #define CONFUSION_HPP
 
 #include <cinttypes>
+#include <cstdio>
 #include <limits>
 #include <utility>
 #include <vector>

@@ -9,32 +9,43 @@
 #include "util.hpp"
 #include "vec.hpp"
 
+// A basic kernel function
 typedef std::function<double(const Vec &x, const Vec &y)> KernelFn;
 
+// A kernel function with precomputed results.
 class CachedKernel {
 private:
+    // The kernel function to use.
     const KernelFn fn;
+    // The number of examples to precompute results pairwise.
     const size_t n;
+    // The precomputed results themselves. This is an emulated 2D vector to
+    // avoid the indirection of nested vectors (since its used in tight loops.)
     std::vector<double> cache;
 
 public:
     CachedKernel(const Phi &phi, const KernelFn fn_):
         fn(fn_),
         n(phi.size()),
+        // Who cares about symmetry? #yolo
         cache(n * n)
     {
         build(phi);
     }
 
+    // Get the precomputed results between the two examples, as indexes into
+    // phi.
     inline double operator()(size_t xi, size_t yi) const {
         return cache.at(xi * n + yi);
     }
 
+    // Run the kernel function on the two examples.
     inline double operator()(const Vec &x, const Vec &y) const {
         return fn(x, y);
     }
 
 private:
+    // Fill in the cache table.
     void build(const Phi &phi) {
         for (size_t i = 0; i < phi.size(); i += 1)
             for (size_t j = 0; j < phi.size(); j += 1)
