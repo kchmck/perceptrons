@@ -65,8 +65,8 @@ private:
     void run() {
         // For each digit class in the development data, calculate the overall
         // accuracy with the current epoch.
-        for (uint32_t d = 0; d < DIGITS; d += 1) {
-            data.iterExamples(d, [&](const Vec &x) {
+        for (uint32_t digit = 0; digit < DIGITS; digit += 1) {
+            data.iterExamples(digit, [&](const Vec &x) {
                 // Tracks the maximum score over the 10 perceptrons.
                 MaxTracker<uint32_t, double> maxScore;
 
@@ -77,7 +77,7 @@ private:
                 // The example was classified correctly if the perceptron with
                 // the maximum score was the one trained for the current digit
                 // class.
-                if (maxScore.key == d)
+                if (maxScore.key == digit)
                     correct += 1;
 
                 total += 1;
