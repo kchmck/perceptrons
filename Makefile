@@ -3,6 +3,7 @@ MAIN = \
     main-tune-epochs.cpp \
     main-tune-degrees.cpp \
     main-tune-widths.cpp \
+    main-eval.cpp \
 
 SRC =
 
@@ -64,6 +65,9 @@ main-tune-degrees: main-tune-degrees.o
 	$(LINK)
 
 main-tune-widths: main-tune-widths.o
+	$(LINK)
+
+main-eval: main-eval.o
 	$(LINK)
 
 %.o: %.cpp

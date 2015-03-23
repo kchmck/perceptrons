@@ -6,3 +6,4 @@ main-validate
 main-tune-epochs
 main-tune-degrees
 main-tune-widths
+main-eval
