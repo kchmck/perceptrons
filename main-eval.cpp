@@ -92,21 +92,26 @@ int main() {
     printf("computing basic confusion...\n");
     const Confusion<perceptron::Linear> basicCon(testData, basicPerceps);
     printConfusion(basicCon);
+
     printf("computing avg confusion...\n");
     const Confusion<perceptron::Averaged> avgCon(testData, avgPerceps);
     printConfusion(avgCon);
+
     printf("computing poly confusion...\n");
     const Confusion<perceptron::Kernel> polyCon(testData, polyPerceps);
     printConfusion(polyCon);
     printSupportVectors(polyPerceps);
+
     printf("computing gaus confusion...\n");
     const Confusion<perceptron::Kernel> gausCon(testData, gausPerceps);
     printConfusion(gausCon);
     printSupportVectors(gausPerceps);
+
     printf("computing avg poly confusion...\n");
     const Confusion<perceptron::AveragedKernel> avgPolyCon(testData, avgPolyPerceps);
     printConfusion(avgPolyCon);
     printSupportVectors(avgPolyPerceps);
+
     printf("computing avg gaus confusion...\n");
     const Confusion<perceptron::AveragedKernel> avgGausCon(testData, avgGausPerceps);
     printConfusion(avgGausCon);
