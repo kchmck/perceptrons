@@ -36,7 +36,7 @@ public:
         return vec;
     }
 
-    // Calculate the norm.
+    // Calculate the norm-squared.
     double normSquared() const {
         double sum = 0.0;
 
