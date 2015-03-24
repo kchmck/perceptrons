@@ -37,18 +37,18 @@ public:
     }
 
     // Calculate the norm.
-    double norm() const {
+    double normSquared() const {
         double sum = 0.0;
 
         for (size_t i = 0; i < size(); i += 1)
             sum += pow(operator[](i), 2);
 
-        return sqrt(sum);
+        return sum;
     }
 
     // Divide each element by the norm.
     void normalize() {
-        double n = norm();
+        double n = sqrt(normSquared());
 
         for (size_t i = 0; i < size(); i += 1)
             (*this)[i] /= n;
