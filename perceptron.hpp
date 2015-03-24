@@ -83,14 +83,14 @@ namespace perceptron {
             bool converged = innerFn();
 
             counter += 1;
-            avg.add_in(accum);
+            avg.addIn(accum);
 
             return converged;
         }
 
         // Finish processing the average vector.
         void finish() {
-            avg.div_in((double) counter);
+            avg.divIn((double) counter);
         }
 
         // Normalize the average vector.
@@ -124,7 +124,7 @@ namespace perceptron {
     public:
         bool inner(size_t i) override {
             if (sgn(weights.dot(phi[i])) != labels[i]) {
-                weights.add_in(phi[i].mult(labels[i]));
+                weights.addIn(phi[i].mult(labels[i]));
                 return false;
             }
 

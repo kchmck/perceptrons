@@ -11,7 +11,7 @@ public:
     using std::vector<double>::vector;
 
     // Add in the given vector elementwise.
-    void add_in(const Vec &other) {
+    void addIn(const Vec &other) {
         assert(size() == other.size());
 
         for (size_t i = 0; i < size(); i += 1)
@@ -19,7 +19,7 @@ public:
     }
 
     // Divide each element by the given scalar.
-    void div_in(double scalar) {
+    void divIn(double scalar) {
         for (size_t i = 0; i < size(); i += 1)
             operator[](i) /= scalar;
     }
