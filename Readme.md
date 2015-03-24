@@ -39,5 +39,5 @@ binaries from SVMLight to be in that directory.
 
 ## History
 
-The history for this project is available on
+The full history of this project is available at
 [github](https://github.com/kchmck/perceptrons).
