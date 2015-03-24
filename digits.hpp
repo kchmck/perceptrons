@@ -15,7 +15,7 @@ static constexpr uint32_t DIGITS = 10;
 class DigitData {
 private:
     // The number of features per example.
-    static constexpr size_t FEATURES = 64;
+    static constexpr uint32_t FEATURES = 64;
 
     typedef std::function<void(uint32_t, const Phi &, const Labels &)> DigitIterFn;
     typedef std::function<void(const Vec &)> ExampleIterFn;
@@ -60,7 +60,7 @@ private:
             // Add the "bias" parameter.
             x.push_back(1);
 
-            for (size_t i = 0; i < FEATURES; i += 1) {
+            for (uint32_t i = 0; i < FEATURES; i += 1) {
                 double num;
                 stream >> num;
 
