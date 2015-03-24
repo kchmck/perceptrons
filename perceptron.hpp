@@ -116,8 +116,9 @@ namespace perceptron {
             return weights.dot(x);
         }
 
-        // Normalize the weights vector.
-        void finish() override { weights.normalize(); }
+        void finish() override {
+            weights.normalize();
+        }
 
     // HACK: there's a bug in gcc (#58972) that lambdas can't access
     // private/protected members, so this has to be public.
@@ -251,7 +252,9 @@ namespace perceptron {
             run();
         }
 
-        void finish() override { averager.finish(); }
+        void finish() override {
+            averager.finish();
+        }
 
         double eval(const Vec &x) const override {
             return Kernel::eval(averager.avg, x);

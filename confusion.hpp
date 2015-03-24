@@ -27,7 +27,9 @@ public:
     }
 
     // Get the overall accuracy.
-    inline double acc() const { return (double) correct / (double) total; }
+    inline double acc() const {
+        return (double) correct / (double) total;
+    }
 
 private:
     // Fill in the matrix by running the given perceptrons on the given test
