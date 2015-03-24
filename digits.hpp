@@ -55,7 +55,10 @@ private:
     // Load the features and labels from the given stream.
     void load(std::istream &stream) {
         for (;;) {
-            Vec x(FEATURES, 0.0);
+            Vec x;
+
+            // Add the "bias" parameter.
+            x.push_back(1);
 
             for (size_t i = 0; i < FEATURES; i += 1) {
                 double num;
@@ -66,7 +69,7 @@ private:
 
                 assert(stream);
 
-                x[i] = num;
+                x.push_back(num);
 
                 char next;
                 assert(stream.get(next));

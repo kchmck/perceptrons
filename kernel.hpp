@@ -57,7 +57,7 @@ namespace kernel {
     // Get a polynomial kernel of the given degree.
     KernelFn poly(double d) {
         return [=](const Vec &x, const Vec &y) {
-            return pow(1 + x.dot(y), d);
+            return pow(x.dot(y), d);
         };
     }
 
