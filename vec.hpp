@@ -15,13 +15,13 @@ public:
         assert(size() == other.size());
 
         for (size_t i = 0; i < size(); i += 1)
-            operator[](i) += other[i];
+            (*this)[i] += other[i];
     }
 
     // Divide each element by the given scalar.
     void divIn(double scalar) {
         for (size_t i = 0; i < size(); i += 1)
-            operator[](i) /= scalar;
+            (*this)[i] /= scalar;
     }
 
     // Subtract the given vector elementwise and return the result.
@@ -41,7 +41,7 @@ public:
         double sum = 0.0;
 
         for (size_t i = 0; i < size(); i += 1)
-            sum += pow(operator[](i), 2);
+            sum += pow((*this)[i], 2);
 
         return sum;
     }
@@ -61,7 +61,7 @@ public:
         double sum = 0.0;
 
         for (size_t i = 0; i < size(); i += 1)
-            sum += operator[](i) * other[i];
+            sum += (*this)[i] * other[i];
 
         return sum;
     }
