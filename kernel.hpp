@@ -63,7 +63,7 @@ namespace kernel {
 
     // Get a Gaussian kernel with the given width.
     KernelFn gaussian(double width) {
-        double denom = 2 * pow(width, 2);
+        double denom = 2.0 * pow(width, 2.0);
 
         return [=](const Vec &x, const Vec &y) {
             return exp(-x.sub(y).normSquared() / denom);
