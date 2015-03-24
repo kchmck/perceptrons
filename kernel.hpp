@@ -66,7 +66,7 @@ namespace kernel {
         double denom = 2 * pow(width, 2);
 
         return [=](const Vec &x, const Vec &y) {
-            return exp(-x.sub(y).norm() / denom);
+            return exp(-pow(x.sub(y).norm(), 2.0) / denom);
         };
     }
 
