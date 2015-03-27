@@ -27,7 +27,8 @@ public:
 
 public:
     MaxTracker():
-        key(),
+        // At least something will blow up this way.
+        key(std::numeric_limits<Key>::max()),
         val(std::numeric_limits<Val>::min())
     {}
 
